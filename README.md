@@ -41,9 +41,9 @@
 2. Запустите проект через CLI:
 
    ```bash
-   dotnet run --project PsycheOS.Console
+   dotnet run --project src/PsycheOS.csproj
    ```
 
 3. Откройте интерактивное меню и попробуйте пропустить жизненное событие через `IndividualMind`. Следите за уровнем аффекта!
 
- ![screenshot](./docs/screenshot.png)
+![screenshot](./docs/screenshot.png)
