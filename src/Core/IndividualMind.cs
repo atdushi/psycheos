@@ -26,12 +26,15 @@ namespace PsycheOS.Core
         
         public void ExecuteWorkTask() => Console.WriteLine("💼 [Персона]: 'Задача выполняется по регламенту.'");
         
-        public void HandleLifeEvent(string ev)
+        public void HandleLifeEvent(LifeEvent ev)
         {
-            // 1. Прогоняем событие через врожденные триггеры
-            _motherComplex.ProcessTrigger(ev);
-            _fatherComplex.ProcessTrigger(ev);
-            _animaProxy.ProcessTrigger(ev);
+            // Переводим enum в легаси-строку для обратной совместимости с логикой комплексов
+            string legacyEventStr = ev.ToLegacyTrigger();
+
+            // 1. Прогоняем событие через врожденные триггеры комплексов
+            _motherComplex.ProcessTrigger(legacyEventStr);
+            _fatherComplex.ProcessTrigger(legacyEventStr);
+            _animaProxy.ProcessTrigger(legacyEventStr);
 
             // 2. СБРОС ИНТЕГРИРОВАННОГО СОСТОЯНИЯ: 
             // Если Тень была чистой после терапии, новый стресс перезаписывает её с нуля
@@ -40,22 +43,21 @@ namespace PsycheOS.Core
                 ShadowDesires = ""; // Очищаем буфер интеграции перед записью нового бага
             }
 
-            // 2. ДИНАМИЧЕСКИЙ ЗАПИСЬ В ТЕНЬ: Стресс инкапсулируется в приватное поле
-            if (ev.Contains("критика"))
+            // 3. ДИНАМИЧЕСКИЙ ЗАПИСЬ В ТЕНЬ: Стресс инкапсулируется в приватное поле
+            switch (ev)
             {
-                ShadowDesires += (ShadowDesires == "" ? "" : " + ") + "Подавленная обида на критику";
-            }
-            else if (ev.Contains("повышение"))
-            {
-                ShadowDesires += (ShadowDesires == "" ? "" : " + ") + "Чувство стыда и неполноценности";
-            }
-            else if (ev.Contains("отношения"))
-            {
-                ShadowDesires += (ShadowDesires == "" ? "" : " + ") + "Страх быть отвергнутым / Идеализация";
-            }
-            else if (ev.Contains("рутина"))
-            {
-                ShadowDesires += (ShadowDesires == "" ? "" : " + ") + "Вытесненная экзистенциальная тоска";
+                case LifeEvent.Criticism:
+                    ShadowDesires += (ShadowDesires == "" ? "" : " + ") + "Подавленная обида на критику";
+                    break;
+                case LifeEvent.Promotion:
+                    ShadowDesires += (ShadowDesires == "" ? "" : " + ") + "Чувство стыда и неполноценности";
+                    break;
+                case LifeEvent.Relationships:
+                    ShadowDesires += (ShadowDesires == "" ? "" : " + ") + "Страх быть отвергнутым / Идеализация";
+                    break;
+                case LifeEvent.Routine:
+                    ShadowDesires += (ShadowDesires == "" ? "" : " + ") + "Вытесненная экзистенциальная тоска";
+                    break;
             }
         }
 

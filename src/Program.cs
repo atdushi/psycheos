@@ -35,55 +35,60 @@ while (true)
     var action = AnsiConsole.Prompt(
         new SelectionPrompt<string>()
             .Title("[bold cyan]Выберите действие или событие среды:[/]\n")
-            .AddChoices(new[] {
+            .AddChoices([
                             "💼 Обычная рабочая рутина (Расход 5%)",
                             "⚡ Критика от тимлида на код-ревью (Триггер Матери)",
                             "📈 Попытка попросить повышение зарплаты (Триггер Отца)",
                             "💖 Новое знакомство / Романтические отношения (Триггер Анимы)",
                             "🛋️ Запустить сессию дебага (Психоанализ / Оптимизация)",
                             "❌ Завершить симуляцию психики"
-            }));
+            ]));
 
     if (action.Contains("❌")) break;
 
     // 4.ОБРАБОТКА ДЕЛЬТЫ ЭНЕРГИИ В ЗАВИСИМОСТИ ОТ ВЫБОРА
-    if (action.Contains("рутина"))
+    if (action.Contains("💼"))
     {
+        app.HandleLifeEvent(LifeEvent.Routine);
         app.DrainEnergyToComplex(5.0);
         app.DisplayPoliteBehavior();
         Thread.Sleep(1000);
     }
-    else if (action.Contains("критика", StringComparison.InvariantCultureIgnoreCase))
+    else if (action.Contains("⚡", StringComparison.InvariantCultureIgnoreCase))
     {
         // Комплекс перехватывает управление и сжирает ресурсы
-        app.HandleLifeEvent("холодная критика");
+        app.HandleLifeEvent(LifeEvent.Criticism);
         app.DrainEnergyToComplex(30.0);
         Thread.Sleep(2000);
     }
-    else if (action.Contains("повышение"))
+    else if (action.Contains("📈"))
     {
         // Комплекс перехватывает управление и сжирает ресурсы
-        app.HandleLifeEvent("повышение зарплаты");
+        app.HandleLifeEvent(LifeEvent.Promotion);
         app.DrainEnergyToComplex(30.0);
         Thread.Sleep(2000);
     }
     else if (action.Contains("🛋️"))
     {
         AnsiConsole.Progress()
-            .Columns(new ProgressColumn[] { new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn() })
+            .Columns([new TaskDescriptionColumn(), new ProgressBarColumn(), new PercentageColumn()])
             .Start(ctx =>
             {
                 var task = ctx.AddTask("[cyan]Анализ метаданных Тени (Reflection)...[/]");
-                while (!task.IsFinished) { task.Increment(5); Thread.Sleep(40); }
+                
+                while (!task.IsFinished) {
+                    task.Increment(5); 
+                    Thread.Sleep(40); 
+                }
             });
 
         therapist.ScanShadow(app);
         therapist.OptimizeLibidoAllocation(app);
         Thread.Sleep(2500);
     }
-    else if (action.Contains("отношения"))
+    else if (action.Contains("💖"))
     {
-        app.HandleLifeEvent("отношения");
+        app.HandleLifeEvent(LifeEvent.Relationships);
         app.DrainEnergyToComplex(15.0); // Проекция сжирает часть Либидо Эго
         Thread.Sleep(2500);
     }

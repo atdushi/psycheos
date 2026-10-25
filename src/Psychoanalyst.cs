@@ -30,7 +30,7 @@ namespace PsycheOS.Therapy
 
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine($"✨ Успешно! Свободный ресурс Эго увеличен до: {patient.Libido.AvailableForEgo}%");
-            Console.WriteLine("✨ Успешно![/] Прокси Анимы переведен в прозрачный режим (Муза).");
+            Console.WriteLine("✨ Успешно! Прокси Анимы переведен в прозрачный режим (Муза).");
             Console.ResetColor();
         }
     }
